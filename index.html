@@ -1,0 +1,78 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Weather</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+
+    <div class="hero is-light">
+        <div class="hero-body">
+            <div class="container">
+                <div class="field">
+                    <div class="field">
+                        <input type="text" class="input" id="txtInput">
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="informacoes is-invisible">
+        <div class="container">
+            <div class="box ">
+                <article class="media">
+                    <div class="media-left">
+                        <figure class="image is-64x64">
+                            <div id="icone" class=""></div>
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <div class="content">
+                            <p>
+                                <strong id="cidade"></strong>
+                                <small id="temperatura"></small>
+                                <hr>
+                                <div id="descricao"></div>
+                            </p>
+                            <div id="temp_min" class="has-text-primary"></div>
+                            <div id="temp_max" class="has-text-danger"></div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+
+        $(".input").on("keyup", function () {
+            var txtInput = $("#txtInput").val();
+            var url = "http://api.openweathermap.org/data/2.5/weather?q=" + txtInput + "&units=metric&APPID=175d0a146525106991c8e93ce91f5eeb";
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (data) {
+                    $(".informacoes").removeClass("is-invisible");
+                    $("#cidade").text(data.name + ", " + data.sys.country + " ");
+                    $("#temp_min").text("Min " + data.main.temp_min + "º");
+                    $("#temp_max").text("Max " + data.main.temp_max + "º");
+                    $("#temperatura").text(data.main.temp + "º");                    
+                    $("#descricao").html(data.weather[0].description);
+                    $("#icone").html("<img src='http://openweathermap.org/img/w/" + data.weather[0].icon + ".png' alt='Icon depicting current weather.'>");
+                }
+            });
+        });       
+    </script>
+</body>
+
+</html>
